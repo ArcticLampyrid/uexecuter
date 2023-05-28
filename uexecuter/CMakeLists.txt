@@ -1,0 +1,30 @@
+cmake_minimum_required(VERSION 3.12.4)
+set(UEXECUTER_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR})
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+file(GLOB_RECURSE SOURCES ${UEXECUTER_ROOT_DIR}/Src/*.c)
+add_library(uexecuter ${SOURCES})
+target_include_directories(uexecuter SYSTEM PUBLIC ${UEXECUTER_ROOT_DIR}/Inc)
+
+file(GLOB UEXECUTER_PUBLIC_HEADERS "${UEXECUTER_ROOT_DIR}/Inc/*.h")
+
+if("${LIB_INSTALL_DIR}" STREQUAL "")
+  set(LIB_INSTALL_DIR "lib")
+endif()
+if("${INC_INSTALL_DIR}" STREQUAL "")
+  set(INC_INSTALL_DIR "include/uexecuter")
+endif()
+
+set_target_properties(
+  uexecuter
+  PROPERTIES OUTPUT_NAME uexecuter
+             ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+             LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+             RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+             PUBLIC_HEADER "${UEXECUTER_PUBLIC_HEADERS}")
+
+install(
+  TARGETS uexecuter
+  ARCHIVE DESTINATION "${LIB_INSTALL_DIR}"
+  LIBRARY DESTINATION "${LIB_INSTALL_DIR}"
+  RUNTIME DESTINATION "${LIB_INSTALL_DIR}"
+  PUBLIC_HEADER DESTINATION "${INC_INSTALL_DIR}")
