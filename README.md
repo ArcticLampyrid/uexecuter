@@ -47,6 +47,7 @@ UEXECUTER is a cute function caller, which takes human-readable strings as instr
        return usart1_irq();
    }
    ```
+4. If you are going to calculate time elapsed, please make sure the interpret priority of SysTick is higher than that of USART.
 
 ## LICENSE
 Licensed under [MPL-2.0](./LICENSE)

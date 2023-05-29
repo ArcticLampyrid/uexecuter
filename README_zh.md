@@ -47,6 +47,7 @@ UEXECUTER 是一个可爱的函数调用器，采用人类可读的字符串作�
        return usart1_irq();
    }
    ```
+4. 如果使用计时功能，请确保 SysTick 的中断优先级比 USART 的中断优先级高。
 
 ## 许可证
 在 [MPL-2.0](./LICENSE) 许可证下许可使用
