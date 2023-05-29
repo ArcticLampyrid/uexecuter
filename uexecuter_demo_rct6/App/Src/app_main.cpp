@@ -71,7 +71,7 @@ UEXECUTER_DEFINE_SERVICE(my_uexecuter_service){
     UEXECUTER_FUNCTION_PROTOTYPE_AUTO(clear_screen, "clear_screen"),
     UEXECUTER_FUNCTION_PROTOTYPE_AUTO(draw_str, "draw_str"),
     UEXECUTER_FUNCTION_PROTOTYPE_AUTO(draw_pixel, "draw_pixel"),
-};
+    UEXECUTER_FUNCTION_PROTOTYPE_AUTO(HAL_Delay, "delay")};
 
 static uexecuter_t uexecuter;
 

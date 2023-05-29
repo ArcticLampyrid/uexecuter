@@ -3,7 +3,9 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
+#include <uexecuter_tick.h>
 #define UEXECUTER_ALLOW_UNPROTOTYPED_CALL 1
+#define UEXECUTER_CALCULATE_TIME_ELAPSED 1
 
 void uexecuter_init(uexecuter_t *inst, const uexecuter_function_prototype_t *function_prototypes, size_t n_function)
 {
@@ -446,7 +448,14 @@ void uexecuter_handle_command(uexecuter_t *inst, uint8_t *command, size_t size)
     }
 
     uexecuter_caller_result_t function_result;
+#if defined(UEXECUTER_CALCULATE_TIME_ELAPSED) && UEXECUTER_CALCULATE_TIME_ELAPSED
+    uint32_t time_begin_us = uexecuter_tick_us();
+#endif
     uexecuter_caller_status_t caller_status = uexecuter_call(function_ptr, params, n_params, &function_result);
+#if defined(UEXECUTER_CALCULATE_TIME_ELAPSED) && UEXECUTER_CALCULATE_TIME_ELAPSED
+    uint32_t time_end_us = uexecuter_tick_us();
+    uint32_t time_elapsed_us = time_end_us - time_begin_us;
+#endif
     switch (caller_status)
     {
     case UEXECUTER_CALLER_STATUS_OK:
@@ -466,6 +475,13 @@ void uexecuter_handle_command(uexecuter_t *inst, uint8_t *command, size_t size)
     }
 
     char result_stat_str[160];
+
+#if defined(UEXECUTER_CALCULATE_TIME_ELAPSED) && UEXECUTER_CALCULATE_TIME_ELAPSED
+    sprintf(result_stat_str, "UEXECUTER: time elapsed = %lu.%03lu ms\n", time_elapsed_us / 1000,
+            time_elapsed_us % 1000);
+    uexecuter_response(inst, result_stat_str);
+#endif
+
     if (prototype != NULL)
     {
         switch (prototype->result_type)
